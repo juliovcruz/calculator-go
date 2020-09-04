@@ -17,7 +17,11 @@ var SERVER_PORT string
 type OperationServiceServer struct{}
 
 func (s *OperationServiceServer) Division(ctx context.Context, req *proto.DivisionRequest) (*proto.DivisionResponse, error) {
-	return &proto.DivisionResponse{Result: 1}, nil
+	data := req.GetOperation()
+
+	result := data.GetNumber1() / data.GetNumber2()
+
+	return &proto.DivisionResponse{Result: result}, nil
 }
 
 func (s *OperationServiceServer) Multiplication(ctx context.Context, req *proto.MultiplicationRequest) (*proto.MultiplicationResponse, error) {
