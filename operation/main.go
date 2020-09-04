@@ -41,7 +41,11 @@ func (s *OperationServiceServer) Sum(ctx context.Context, req *proto.SumRequest)
 }
 
 func (s *OperationServiceServer) Subtraction(ctx context.Context, req *proto.SubtractionRequest) (*proto.SubtractionResponse, error) {
-	return &proto.SubtractionResponse{Result: 1}, nil
+	data := req.GetOperation()
+
+	result := data.GetNumber1() - data.GetNumber2()
+
+	return &proto.SubtractionResponse{Result: result}, nil
 }
 
 func main() {
