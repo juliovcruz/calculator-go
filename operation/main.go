@@ -25,7 +25,11 @@ func (s *OperationServiceServer) Division(ctx context.Context, req *proto.Divisi
 }
 
 func (s *OperationServiceServer) Multiplication(ctx context.Context, req *proto.MultiplicationRequest) (*proto.MultiplicationResponse, error) {
-	return &proto.MultiplicationResponse{Result: 1}, nil
+	data := req.GetOperation()
+
+	result := data.GetNumber1() * data.GetNumber2()
+
+	return &proto.MultiplicationResponse{Result: result}, nil
 }
 
 func (s *OperationServiceServer) Sum(ctx context.Context, req *proto.SumRequest) (*proto.SumResponse, error) {
