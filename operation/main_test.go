@@ -174,3 +174,48 @@ func TestMultiplication(t *testing.T) {
 	)
 
 }
+
+func TestSubtraction(t *testing.T) {
+	err := readEnv()
+	if err != nil {
+		log.Fatalf("Error in readEnv: %v", err)
+	}
+
+	conn, err := grpc.Dial("localhost:"+TEST_PORT, grpc.WithInsecure())
+	if err != nil {
+		t.Fatalf("Error in connection to ServerTest: %v", err)
+	}
+	defer conn.Close()
+	server := proto.NewOperationServiceClient(conn)
+
+	mapTest := map[float64]OperationModel{
+		8: OperationModel{
+			number1: 10,
+			number2: 2,
+		},
+		19: OperationModel{
+			number1: 21,
+			number2: 2,
+		},
+	}
+
+	t.Run("Subtraction",
+		func(t *testing.T) {
+			for key, value := range mapTest {
+				res, err := server.Subtraction(context.Background(),
+					&proto.SubtractionRequest{
+						Operation: &proto.Operation{
+							Number1: value.number1,
+							Number2: value.number2,
+						},
+					},
+				)
+				if err != nil {
+					t.Fatalf("Error in execution method %v:", err)
+				}
+				assert.Equal(t, key, res.Result)
+			}
+		},
+	)
+
+}
