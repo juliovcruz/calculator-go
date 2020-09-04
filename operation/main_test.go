@@ -76,7 +76,7 @@ func TestSum(t *testing.T) {
 					},
 				)
 				if err != nil {
-					t.Fatalf("Error in execution method Sum %v:", err)
+					t.Fatalf("Error in execution method %v:", err)
 				}
 				assert.Equal(t, key, res.Result)
 			}
@@ -121,7 +121,52 @@ func TestDivision(t *testing.T) {
 					},
 				)
 				if err != nil {
-					t.Fatalf("Error in execution method Sum %v:", err)
+					t.Fatalf("Error in execution method %v:", err)
+				}
+				assert.Equal(t, key, res.Result)
+			}
+		},
+	)
+
+}
+
+func TestMultiplication(t *testing.T) {
+	err := readEnv()
+	if err != nil {
+		log.Fatalf("Error in readEnv: %v", err)
+	}
+
+	conn, err := grpc.Dial("localhost:"+TEST_PORT, grpc.WithInsecure())
+	if err != nil {
+		t.Fatalf("Error in connection to ServerTest: %v", err)
+	}
+	defer conn.Close()
+	server := proto.NewOperationServiceClient(conn)
+
+	mapTest := map[float64]OperationModel{
+		20: OperationModel{
+			number1: 10,
+			number2: 2,
+		},
+		15: OperationModel{
+			number1: 7.5,
+			number2: 2,
+		},
+	}
+
+	t.Run("Multiplication",
+		func(t *testing.T) {
+			for key, value := range mapTest {
+				res, err := server.Multiplication(context.Background(),
+					&proto.MultiplicationRequest{
+						Operation: &proto.Operation{
+							Number1: value.number1,
+							Number2: value.number2,
+						},
+					},
+				)
+				if err != nil {
+					t.Fatalf("Error in execution method %v:", err)
 				}
 				assert.Equal(t, key, res.Result)
 			}
