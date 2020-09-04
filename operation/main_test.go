@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net"
 	"operation/proto"
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 )
 
@@ -56,6 +58,29 @@ func TestSum(t *testing.T) {
 			number1: 5,
 			number2: 5,
 		},
+		20: OperationModel{
+			number1: 1,
+			number2: 19,
+		},
 	}
+
+	t.Run("Sum",
+		func(t *testing.T) {
+			for key, value := range mapTest {
+				res, err := server.Sum(context.Background(),
+					&proto.SumRequest{
+						Operation: &proto.Operation{
+							Number1: value.number1,
+							Number2: value.number2,
+						},
+					},
+				)
+				if err != nil {
+					t.Fatalf("Error in execution method Sum %v:", err)
+				}
+				assert.Equal(t, key, res.Result)
+			}
+		},
+	)
 
 }
