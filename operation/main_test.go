@@ -84,3 +84,48 @@ func TestSum(t *testing.T) {
 	)
 
 }
+
+func TestDivision(t *testing.T) {
+	err := readEnv()
+	if err != nil {
+		log.Fatalf("Error in readEnv: %v", err)
+	}
+
+	conn, err := grpc.Dial("localhost:"+TEST_PORT, grpc.WithInsecure())
+	if err != nil {
+		t.Fatalf("Error in connection to ServerTest: %v", err)
+	}
+	defer conn.Close()
+	server := proto.NewOperationServiceClient(conn)
+
+	mapTest := map[float64]OperationModel{
+		20: OperationModel{
+			number1: 40,
+			number2: 2,
+		},
+		7.5: OperationModel{
+			number1: 15,
+			number2: 2,
+		},
+	}
+
+	t.Run("Division",
+		func(t *testing.T) {
+			for key, value := range mapTest {
+				res, err := server.Division(context.Background(),
+					&proto.DivisionRequest{
+						Operation: &proto.Operation{
+							Number1: value.number1,
+							Number2: value.number2,
+						},
+					},
+				)
+				if err != nil {
+					t.Fatalf("Error in execution method Sum %v:", err)
+				}
+				assert.Equal(t, key, res.Result)
+			}
+		},
+	)
+
+}
