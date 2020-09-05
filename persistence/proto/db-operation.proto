@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option go_package = "proto";
+
+import "google/protobuf/timestamp.proto";
+
+message DbOperation {
+  string id = 1;
+  double number1 = 2;
+  double number2 = 3;
+  double result = 4;
+  string operation = 5;
+  google.protobuf.Timestamp DateCreated = 6;
+}
+
+message CreateOperationRequest {
+  DbOperation dbOperation = 1;
+}
+
+message CreateOperationResponse {
+  string id = 1;
+}
+
+message ListOperationRequest {}
+
+message ListOperationResponse {
+  repeated DbOperation dbOperations = 1;
+}
+
+message DeleteOperationRequest {
+  string id = 1;
+}
+
+message DeleteOperationResponse {
+  bool success = 1;
+}
+
+message ReadOperationRequest {
+  string id = 1;
+}
+
+message ReadOperationResponse {
+  DbOperation dbOperation = 1;
+}
+
+service Oervice {
+  rpc CreateOperation(CreateOperationRequest) returns (CreateOperationResponse);
+  rpc ListOperation(ListOperationRequest) returns (ListOperationResponse);
+  rpc DeleteOperation(DeleteOperationRequest) returns (DeleteOperationResponse);
+  rpc ReadOperation(ReadOperationRequest) returns (ReadOperationResponse);
+} 
