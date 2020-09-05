@@ -7,6 +7,7 @@ import (
 	"net"
 	"operation/proto"
 	"os"
+	"strconv"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/joho/godotenv"
@@ -18,39 +19,61 @@ var SERVER_PORT string
 var PROJECT_ID string
 var TOPIC_ID string
 var SUB_ID string
+var topic *pubsub.Topic
 
 type OperationServiceServer struct{}
 
 func (s *OperationServiceServer) Division(ctx context.Context, req *proto.DivisionRequest) (*proto.DivisionResponse, error) {
 	data := req.GetOperation()
+	num1 := data.GetNumber1()
+	num2 := data.GetNumber2()
 
-	result := data.GetNumber1() / data.GetNumber2()
+	result := num1 / num2
+
+	publishMessage(ctx, topic, strconv.FormatFloat(num1, 'g', -1, 64)+"/"+strconv.FormatFloat(num2, 'g', -1, 64)+"="+strconv.FormatFloat(result, 'g', -1, 64))
 
 	return &proto.DivisionResponse{Result: result}, nil
 }
 
 func (s *OperationServiceServer) Multiplication(ctx context.Context, req *proto.MultiplicationRequest) (*proto.MultiplicationResponse, error) {
 	data := req.GetOperation()
+	num1 := data.GetNumber1()
+	num2 := data.GetNumber2()
 
-	result := data.GetNumber1() * data.GetNumber2()
+	result := num1 * num2
+
+	publishMessage(ctx, topic, strconv.FormatFloat(num1, 'g', -1, 64)+"*"+strconv.FormatFloat(num2, 'g', -1, 64)+"="+strconv.FormatFloat(result, 'g', -1, 64))
 
 	return &proto.MultiplicationResponse{Result: result}, nil
 }
 
 func (s *OperationServiceServer) Sum(ctx context.Context, req *proto.SumRequest) (*proto.SumResponse, error) {
 	data := req.GetOperation()
+	num1 := data.GetNumber1()
+	num2 := data.GetNumber2()
 
-	result := data.GetNumber1() + data.GetNumber2()
+	result := num1 + num2
+
+	publishMessage(ctx, topic, strconv.FormatFloat(num1, 'g', -1, 64)+"+"+strconv.FormatFloat(num2, 'g', -1, 64)+"="+strconv.FormatFloat(result, 'g', -1, 64))
 
 	return &proto.SumResponse{Result: result}, nil
 }
 
 func (s *OperationServiceServer) Subtraction(ctx context.Context, req *proto.SubtractionRequest) (*proto.SubtractionResponse, error) {
 	data := req.GetOperation()
+	num1 := data.GetNumber1()
+	num2 := data.GetNumber2()
+	result := num1 - num2
 
-	result := data.GetNumber1() - data.GetNumber2()
+	publishMessage(ctx, topic, strconv.FormatFloat(num1, 'g', -1, 64)+"-"+strconv.FormatFloat(num2, 'g', -1, 64)+"="+strconv.FormatFloat(result, 'g', -1, 64))
 
 	return &proto.SubtractionResponse{Result: result}, nil
+}
+
+func publishMessage(ctx context.Context, topic *pubsub.Topic, msg string) {
+	topic.Publish(ctx, &pubsub.Message{
+		Data: []byte(msg),
+	})
 }
 
 func main() {
@@ -71,16 +94,12 @@ func main() {
 		log.Fatalf("Error in connection to clientPubSub: %v", err)
 	}
 
-	topic, err := clientPubSub.CreateTopic(ctx, TOPIC_ID)
+	topic, err = clientPubSub.CreateTopic(ctx, TOPIC_ID)
 	if err != nil {
 		topic = clientPubSub.Topic(TOPIC_ID)
 		fmt.Println("Fail in createTopic: %v", err)
 	}
 	defer topic.Stop()
-
-	topic.Publish(ctx, &pubsub.Message{
-		Data: []byte("testing"),
-	})
 
 	sub, err := clientPubSub.CreateSubscription(ctx, SUB_ID, pubsub.SubscriptionConfig{
 		Topic: topic,
@@ -90,6 +109,8 @@ func main() {
 		fmt.Println("Fail in createSubscription: %v", err)
 	}
 	fmt.Println(sub)
+
+	publishMessage(ctx, topic, "teste")
 
 	grpcServer := grpc.NewServer()
 
