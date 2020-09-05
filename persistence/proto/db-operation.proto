@@ -2,15 +2,13 @@ syntax = "proto3";
 
 option go_package = "proto";
 
-import "google/protobuf/timestamp.proto";
-
 message DbOperation {
   string id = 1;
   double number1 = 2;
   double number2 = 3;
   double result = 4;
   string operation = 5;
-  google.protobuf.Timestamp DateCreated = 6;
+  string DateCreated = 6;
 }
 
 message CreateOperationRequest {
