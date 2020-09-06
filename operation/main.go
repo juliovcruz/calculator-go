@@ -110,8 +110,6 @@ func main() {
 	}
 	fmt.Println(sub)
 
-	publishMessage(ctx, topic, "teste")
-
 	grpcServer := grpc.NewServer()
 
 	proto.RegisterOperationServiceServer(grpcServer, &OperationServiceServer{})
