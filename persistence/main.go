@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"persistence/proto"
+	"strconv"
+	"strings"
 
 	"cloud.google.com/go/pubsub"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/joho/godotenv"
 )
 
@@ -18,46 +18,11 @@ var PROJECT_ID string
 var TOPIC_ID string
 var SUB_ID string
 
-type DbOperationService struct{}
-
-func (s *DbOperationService) CreateOperation(ctx context.Context, req *proto.CreateOperationRequest) (*proto.CreateOperationResponse, error) {
-	return &proto.CreateOperationResponse{
-		Id: "1",
-	}, nil
-}
-func (s *DbOperationService) DeleteOperation(ctx context.Context, req *proto.DeleteOperationRequest) (*proto.DeleteOperationResponse, error) {
-	return &proto.DeleteOperationResponse{
-		Success: true,
-	}, nil
-}
-
-func (s *DbOperationService) ReadOperation(ctx context.Context, req *proto.ReadOperationRequest) (*proto.ReadOperationResponse, error) {
-
-	return &proto.ReadOperationResponse{
-		DbOperation: &proto.DbOperation{
-			Id:          "id",
-			Number1:     1,
-			Number2:     2,
-			Result:      3,
-			Operation:   "+",
-			DateCreated: ptypes.TimestampNow(),
-		},
-	}, nil
-}
-
-func (s *DbOperationService) ListOperation(ctx context.Context, req *proto.ListOperationRequest) (*proto.ListOperationResponse, error) {
-	return &proto.ListOperationResponse{
-		DbOperations: []*proto.DbOperation{
-			{Id: "id",
-				Number1:     1,
-				Number2:     2,
-				Result:      3,
-				Operation:   "+",
-				DateCreated: ptypes.TimestampNow(),
-			},
-		},
-	}, nil
-
+type OperationModel struct {
+	number1   float64
+	number2   float64
+	operation string
+	result    float64
 }
 
 func main() {
@@ -90,12 +55,57 @@ func main() {
 
 	err = sub.Receive(context.Background(), func(ctx context.Context, m *pubsub.Message) {
 		log.Printf("Got message: %s", m.Data)
+		str := m.Data
+
+		op := extractOperation(string(str))
+
+		fmt.Println(op)
+
 		m.Ack()
 	})
 	if err != nil {
 		fmt.Println("Error in Receive: %v", err)
 	}
 
+}
+
+func extractOperation(str string) OperationModel {
+	var strN1, strN2, strOp, strResult string
+	if strings.ContainsAny(str, "-") {
+		strOp = "-"
+		strN1 = str[0:strings.IndexAny(str, strOp)]
+		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
+		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
+	}
+	if strings.ContainsAny(str, "+") {
+		strOp = "+"
+		strN1 = str[0:strings.IndexAny(str, strOp)]
+		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
+		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
+	}
+	if strings.ContainsAny(str, "/") {
+		strOp = "/"
+		strN1 = str[0:strings.IndexAny(str, strOp)]
+		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
+		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
+	}
+	if strings.ContainsAny(str, "*") {
+		strOp = "*"
+		strN1 = str[0:strings.IndexAny(str, strOp)]
+		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
+		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
+	}
+
+	n1, _ := strconv.ParseFloat(strN1, 64)
+	n2, _ := strconv.ParseFloat(strN2, 64)
+	result, _ := strconv.ParseFloat(strResult, 64)
+
+	return OperationModel{
+		number1:   n1,
+		number2:   n2,
+		result:    result,
+		operation: strOp,
+	}
 }
 
 func readEnv() error {
