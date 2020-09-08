@@ -13,3 +13,19 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS} 
     volumes:
       - ./mongo-volume:/data/db
+    
+  api:
+    image: golang:1.14
+    container_name: api
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    environment: 
+      PUBSUB_EMULATOR_HOST: localhost:8085
+      PUBSUB_PROJECT_ID: calculator
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: go run persistence/main.go

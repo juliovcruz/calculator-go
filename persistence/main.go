@@ -10,6 +10,7 @@ import (
 
 	"cloud.google.com/go/pubsub"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var TEST_PORT string
@@ -17,12 +18,24 @@ var SERVER_PORT string
 var PROJECT_ID string
 var TOPIC_ID string
 var SUB_ID string
+var DB_HOST string
+var DB_PORT string
+var DB_NAME string
+var DB_USER string
+var DB_PASS string
 
+/*
+var Db *mongo.Client
+var OperationDb *mongo.Collection
+var MongoContext context.Context
+*/
 type OperationModel struct {
-	number1   float64
-	number2   float64
-	operation string
-	result    float64
+	Id          primitive.ObjectID `bson:"_id,omitempty"`
+	Number1     float64            `bson:"number1"`
+	Operation   string             `bson:"operation"`
+	Number2     float64            `bson:"number2"`
+	Result      float64            `bson:"result"`
+	DateCreated string             `bson:"dateCreated"`
 }
 
 func main() {
@@ -53,14 +66,45 @@ func main() {
 		fmt.Println("Fail in createSubscription: %v", err)
 	}
 
+	/*
+		MongoContext = context.Background()
+
+		Db, err = mongo.Connect(MongoContext,
+			options.Client().ApplyURI("mongodb://"+DB_USER+":"+DB_PASS+"@"+DB_HOST+":"+DB_PORT))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = Db.Ping(MongoContext, nil)
+		if err != nil {
+			fmt.Println("debug")
+			log.Fatal(err)
+		}
+		OperationDb = Db.Database("calculator-go").Collection("operations")
+
+		fmt.Println("Server successfully started on port:" + SERVER_PORT)
+	*/
 	err = sub.Receive(context.Background(), func(ctx context.Context, m *pubsub.Message) {
-		log.Printf("Got message: %s", m.Data)
+		fmt.Print("Got message: ")
 		str := m.Data
 
-		op := extractOperation(string(str))
+		file, err := os.OpenFile("operations.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+		if err != nil {
+			fmt.Println("Error in Receive: %v", err)
+		}
 
+		log.SetOutput(file)
+
+		op := extractOperation(string(str))
+		log.Println(op)
 		fmt.Println(op)
 
+		/*r, err := createOperation(op)
+		if err != nil {
+			fmt.Println("Error in createOperation: %v", err)
+		}
+		fmt.Println(r)
+		*/
 		m.Ack()
 	})
 	if err != nil {
@@ -101,13 +145,33 @@ func extractOperation(str string) OperationModel {
 	result, _ := strconv.ParseFloat(strResult, 64)
 
 	return OperationModel{
-		number1:   n1,
-		number2:   n2,
-		result:    result,
-		operation: strOp,
+		Number1:   n1,
+		Number2:   n2,
+		Result:    result,
+		Operation: strOp,
 	}
 }
 
+/*
+func createOperation(op OperationModel) (string, error) {
+	dataDb := OperationModel{
+		Number1:     op.Number1,
+		Number2:     op.Number2,
+		Result:      op.Result,
+		Operation:   op.Operation,
+		DateCreated: time.Now().String(),
+	}
+
+	result, err := OperationDb.InsertOne(MongoContext, dataDb)
+	if err != nil {
+		return "", err
+	}
+
+	idResult := result.InsertedID.(primitive.ObjectID)
+
+	return idResult.Hex(), nil
+}
+*/
 func readEnv() error {
 	err := godotenv.Load("../.env")
 	if err != nil {
@@ -118,6 +182,11 @@ func readEnv() error {
 	PROJECT_ID = os.Getenv("PROJECT_ID")
 	TOPIC_ID = os.Getenv("TOPIC_ID")
 	SUB_ID = os.Getenv("SUB_ID")
+	DB_HOST = os.Getenv("DB_HOST")
+	DB_PORT = os.Getenv("DB_PORT")
+	DB_NAME = os.Getenv("DB_NAME")
+	DB_USER = os.Getenv("DB_USER")
+	DB_PASS = os.Getenv("DB_PASS")
 
 	return nil
 }
