@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = "proto";
+
+import "operation-db.proto";
+
+message FindByIdRequest {
+  string id = 1;
+}
+
+message FindByIdResponse {
+  OperationDb operationDb = 1;
+}
+
+message FindByOpRequest {
+  enumOp op = 1;
+}
+
+message FindByOpResponse {
+  OperationDb operationDb = 1;
+}
+
+service OperationDbService {
+  rpc FindById(FindByIdRequest) returns (FindByIdResponse);
+  rpc FindByOp(FindByOpRequest) returns (FindByOpResponse);
+}

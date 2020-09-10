@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "proto";
+
+enum enumOp {
+  DIVISION = 0;
+  MULTIPLICATION = 1;
+  SUBTRACTION = 2;
+  SUM = 3;
+}
+
+message OperationDb {
+  string id = 1;
+  double num1 = 2;
+  double num2 = 3;
+  double result = 4;
+  enumOp op = 5;
+  string dateCreated = 6;
+}
