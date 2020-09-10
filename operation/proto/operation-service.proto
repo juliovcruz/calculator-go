@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option go_package = "proto";
+
+import "operation.proto";
+
+message SumRequest {
+  Operation operation = 1;
+}
+
+message SumResponse {
+  double result = 1;
+}
+
+message MultiplicationRequest {
+  Operation operation = 1;
+}
+
+message MultiplicationResponse {
+  double result = 1;
+}
+
+message DivisionRequest {
+  Operation operation = 1;
+}
+
+message DivisionResponse {
+  double result = 1;
+}
+
+message SubtractionRequest {
+  Operation operation = 1;
+}
+
+message SubtractionResponse {
+  double result = 1;
+}
+
+service OperationService {
+  rpc Sum(SumRequest) returns (SumResponse);
+  rpc Multiplication(MultiplicationRequest) returns (MultiplicationResponse);
+  rpc Division(DivisionRequest) returns (DivisionResponse);
+  rpc Subtraction(SubtractionRequest) returns (SubtractionResponse);
+}
