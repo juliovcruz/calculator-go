@@ -180,11 +180,83 @@ func (m *FindByOpResponse) GetOperationDb() *OperationDb {
 	return nil
 }
 
+type ListAllRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListAllRequest) Reset()         { *m = ListAllRequest{} }
+func (m *ListAllRequest) String() string { return proto.CompactTextString(m) }
+func (*ListAllRequest) ProtoMessage()    {}
+func (*ListAllRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca76f41c7091e15b, []int{4}
+}
+
+func (m *ListAllRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListAllRequest.Unmarshal(m, b)
+}
+func (m *ListAllRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListAllRequest.Marshal(b, m, deterministic)
+}
+func (m *ListAllRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllRequest.Merge(m, src)
+}
+func (m *ListAllRequest) XXX_Size() int {
+	return xxx_messageInfo_ListAllRequest.Size(m)
+}
+func (m *ListAllRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllRequest proto.InternalMessageInfo
+
+type ListAllResponse struct {
+	Operations           []*OperationDb `protobuf:"bytes,1,rep,name=operations,proto3" json:"operations,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *ListAllResponse) Reset()         { *m = ListAllResponse{} }
+func (m *ListAllResponse) String() string { return proto.CompactTextString(m) }
+func (*ListAllResponse) ProtoMessage()    {}
+func (*ListAllResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ca76f41c7091e15b, []int{5}
+}
+
+func (m *ListAllResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListAllResponse.Unmarshal(m, b)
+}
+func (m *ListAllResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListAllResponse.Marshal(b, m, deterministic)
+}
+func (m *ListAllResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllResponse.Merge(m, src)
+}
+func (m *ListAllResponse) XXX_Size() int {
+	return xxx_messageInfo_ListAllResponse.Size(m)
+}
+func (m *ListAllResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllResponse proto.InternalMessageInfo
+
+func (m *ListAllResponse) GetOperations() []*OperationDb {
+	if m != nil {
+		return m.Operations
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*FindByIdRequest)(nil), "FindByIdRequest")
 	proto.RegisterType((*FindByIdResponse)(nil), "FindByIdResponse")
 	proto.RegisterType((*FindByOpRequest)(nil), "FindByOpRequest")
 	proto.RegisterType((*FindByOpResponse)(nil), "FindByOpResponse")
+	proto.RegisterType((*ListAllRequest)(nil), "ListAllRequest")
+	proto.RegisterType((*ListAllResponse)(nil), "ListAllResponse")
 }
 
 func init() {
@@ -192,20 +264,24 @@ func init() {
 }
 
 var fileDescriptor_ca76f41c7091e15b = []byte{
-	// 207 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0x92, 0xca, 0x2f, 0x48, 0x2d,
-	0x4a, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x4d, 0x49, 0xd2, 0x2d, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e,
-	0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x97, 0x12, 0x42, 0x96, 0x83, 0x88, 0x29, 0x29, 0x72, 0xf1,
-	0xbb, 0x65, 0xe6, 0xa5, 0x38, 0x55, 0x7a, 0xa6, 0x04, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x08,
-	0xf1, 0x71, 0x31, 0x65, 0xa6, 0x48, 0x30, 0x2a, 0x30, 0x6a, 0x70, 0x06, 0x01, 0x59, 0x4a, 0x4e,
-	0x5c, 0x02, 0x08, 0x25, 0xc5, 0x05, 0xf9, 0x79, 0xc5, 0xa9, 0x42, 0x7a, 0x5c, 0xdc, 0x70, 0xc3,
-	0x5c, 0x92, 0xc0, 0x8a, 0xb9, 0x8d, 0x78, 0xf4, 0xfc, 0x11, 0x62, 0x41, 0xc8, 0x0a, 0x94, 0xb4,
-	0x60, 0xd6, 0xf8, 0x17, 0xc0, 0xac, 0x11, 0xe7, 0x62, 0xca, 0x2f, 0x00, 0xeb, 0xe4, 0x33, 0x62,
-	0xd7, 0x4b, 0xcd, 0x2b, 0xcd, 0x05, 0xca, 0x01, 0x85, 0x10, 0xf6, 0x81, 0xd4, 0x92, 0x67, 0x9f,
-	0x51, 0x19, 0x97, 0x10, 0x92, 0x5c, 0x30, 0x24, 0x18, 0x84, 0xf4, 0xb9, 0x38, 0x60, 0x3e, 0x11,
-	0x12, 0xd0, 0x43, 0xf3, 0xb7, 0x94, 0xa0, 0x1e, 0x86, 0x37, 0xe1, 0x1a, 0xfc, 0x0b, 0xe0, 0x1a,
-	0xe0, 0x3e, 0x80, 0x6b, 0x40, 0xb8, 0xd3, 0x89, 0x3d, 0x8a, 0x15, 0x1c, 0xae, 0x49, 0x6c, 0x60,
-	0xca, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x09, 0x9f, 0xa4, 0x41, 0x90, 0x01, 0x00, 0x00,
+	// 258 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0x9c, 0x51, 0xcf, 0x4a, 0xc3, 0x30,
+	0x18, 0xa7, 0x13, 0xad, 0x7e, 0x93, 0xb6, 0xe6, 0xa2, 0xf4, 0xa4, 0x39, 0x89, 0x6c, 0x9f, 0x50,
+	0x1f, 0x40, 0x2c, 0x22, 0x08, 0x42, 0xa1, 0xde, 0xbc, 0x59, 0x93, 0x43, 0x60, 0x26, 0xb1, 0xc9,
+	0x04, 0xdf, 0xc7, 0x07, 0x35, 0x66, 0x6d, 0x1a, 0xb7, 0x9b, 0xa7, 0x96, 0xdf, 0xdf, 0x7e, 0xbf,
+	0x42, 0xa9, 0x34, 0xef, 0x5f, 0xad, 0x50, 0x72, 0xc9, 0xba, 0xa5, 0xe1, 0xfd, 0xa7, 0x78, 0xe3,
+	0xa8, 0x7b, 0x65, 0x55, 0x49, 0x62, 0x6e, 0x83, 0xd1, 0x0b, 0xc8, 0x1f, 0x84, 0x64, 0xf5, 0xd7,
+	0x23, 0x6b, 0xf9, 0xc7, 0x9a, 0x1b, 0x4b, 0x32, 0x98, 0x09, 0x76, 0x96, 0x9c, 0x27, 0x97, 0x47,
+	0xad, 0x7b, 0xa3, 0x35, 0x14, 0x93, 0xc4, 0x68, 0x25, 0x0d, 0x27, 0x08, 0xf3, 0x10, 0x76, 0xdf,
+	0x79, 0xf1, 0xbc, 0x3a, 0xc6, 0x66, 0xc2, 0xda, 0x58, 0x40, 0xaf, 0xc6, 0x9a, 0x46, 0x8f, 0x35,
+	0xa7, 0x30, 0x53, 0xda, 0x3b, 0xb3, 0x2a, 0x45, 0x2e, 0xd7, 0xef, 0x8e, 0x73, 0xd0, 0xd4, 0xf7,
+	0xab, 0xfd, 0x67, 0x5f, 0x01, 0xd9, 0x93, 0x30, 0xf6, 0x6e, 0xb5, 0x1a, 0xea, 0xe8, 0x2d, 0xe4,
+	0x01, 0x19, 0x42, 0x17, 0x00, 0xc1, 0x63, 0x5c, 0xe6, 0xde, 0x4e, 0x66, 0xc4, 0x57, 0xdf, 0x09,
+	0x90, 0x88, 0x7b, 0xde, 0x4c, 0x4b, 0xae, 0xe1, 0x70, 0x5c, 0x87, 0x14, 0xb8, 0xb5, 0x65, 0x79,
+	0x82, 0x3b, 0xd3, 0x05, 0x43, 0xa3, 0x83, 0x21, 0xac, 0x12, 0x0c, 0xd1, 0xed, 0x0b, 0x48, 0x87,
+	0x2f, 0x27, 0x39, 0xfe, 0xbd, 0xaa, 0x2c, 0x70, 0xeb, 0xa8, 0x3a, 0x7d, 0xd9, 0xf7, 0x7f, 0xb6,
+	0x3b, 0xf0, 0x8f, 0x9b, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x32, 0x19, 0xc6, 0xd9, 0x12, 0x02,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -222,6 +298,7 @@ const _ = grpc.SupportPackageIsVersion6
 type OperationDbServiceClient interface {
 	FindById(ctx context.Context, in *FindByIdRequest, opts ...grpc.CallOption) (*FindByIdResponse, error)
 	FindByOp(ctx context.Context, in *FindByOpRequest, opts ...grpc.CallOption) (*FindByOpResponse, error)
+	ListAll(ctx context.Context, in *ListAllRequest, opts ...grpc.CallOption) (*ListAllResponse, error)
 }
 
 type operationDbServiceClient struct {
@@ -250,10 +327,20 @@ func (c *operationDbServiceClient) FindByOp(ctx context.Context, in *FindByOpReq
 	return out, nil
 }
 
+func (c *operationDbServiceClient) ListAll(ctx context.Context, in *ListAllRequest, opts ...grpc.CallOption) (*ListAllResponse, error) {
+	out := new(ListAllResponse)
+	err := c.cc.Invoke(ctx, "/OperationDbService/ListAll", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OperationDbServiceServer is the server API for OperationDbService service.
 type OperationDbServiceServer interface {
 	FindById(context.Context, *FindByIdRequest) (*FindByIdResponse, error)
 	FindByOp(context.Context, *FindByOpRequest) (*FindByOpResponse, error)
+	ListAll(context.Context, *ListAllRequest) (*ListAllResponse, error)
 }
 
 // UnimplementedOperationDbServiceServer can be embedded to have forward compatible implementations.
@@ -265,6 +352,9 @@ func (*UnimplementedOperationDbServiceServer) FindById(ctx context.Context, req 
 }
 func (*UnimplementedOperationDbServiceServer) FindByOp(ctx context.Context, req *FindByOpRequest) (*FindByOpResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByOp not implemented")
+}
+func (*UnimplementedOperationDbServiceServer) ListAll(ctx context.Context, req *ListAllRequest) (*ListAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAll not implemented")
 }
 
 func RegisterOperationDbServiceServer(s *grpc.Server, srv OperationDbServiceServer) {
@@ -307,6 +397,24 @@ func _OperationDbService_FindByOp_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OperationDbService_ListAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OperationDbServiceServer).ListAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/OperationDbService/ListAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OperationDbServiceServer).ListAll(ctx, req.(*ListAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _OperationDbService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "OperationDbService",
 	HandlerType: (*OperationDbServiceServer)(nil),
@@ -318,6 +426,10 @@ var _OperationDbService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindByOp",
 			Handler:    _OperationDbService_FindByOp_Handler,
+		},
+		{
+			MethodName: "ListAll",
+			Handler:    _OperationDbService_ListAll_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

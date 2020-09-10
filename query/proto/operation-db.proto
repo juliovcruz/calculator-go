@@ -11,8 +11,8 @@ enum enumOp {
 
 message OperationDb {
   string id = 1;
-  double num1 = 2;
-  double num2 = 3;
+  double number1 = 2;
+  double number2 = 3;
   double result = 4;
   enumOp op = 5;
   string dateCreated = 6;
