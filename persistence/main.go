@@ -2,15 +2,17 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"strconv"
-	"strings"
+	"time"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var TEST_PORT string
@@ -24,11 +26,10 @@ var DB_NAME string
 var DB_USER string
 var DB_PASS string
 
-/*
 var Db *mongo.Client
 var OperationDb *mongo.Collection
 var MongoContext context.Context
-*/
+
 type OperationModel struct {
 	Id          primitive.ObjectID `bson:"_id,omitempty"`
 	Number1     float64            `bson:"number1"`
@@ -66,45 +67,36 @@ func main() {
 		fmt.Println("Fail in createSubscription: %v", err)
 	}
 
-	/*
-		MongoContext = context.Background()
+	MongoContext = context.Background()
+	//options.Client().ApplyURI("mongodb://"+DB_USER+":"+DB_PASS+"@"+DB_HOST+":"+DB_PORT))
+	Db, err = mongo.Connect(MongoContext,
+		options.Client().ApplyURI("mongodb://localhost:27017/"))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-		Db, err = mongo.Connect(MongoContext,
-			options.Client().ApplyURI("mongodb://"+DB_USER+":"+DB_PASS+"@"+DB_HOST+":"+DB_PORT))
-		if err != nil {
-			log.Fatal(err)
-		}
+	err = Db.Ping(MongoContext, nil)
+	if err != nil {
+		fmt.Println("debug", err)
+		log.Fatal(err)
+	}
+	OperationDb = Db.Database("calculator-go").Collection("operations")
 
-		err = Db.Ping(MongoContext, nil)
-		if err != nil {
-			fmt.Println("debug")
-			log.Fatal(err)
-		}
-		OperationDb = Db.Database("calculator-go").Collection("operations")
+	fmt.Println("Server successfully started on port:" + SERVER_PORT)
 
-		fmt.Println("Server successfully started on port:" + SERVER_PORT)
-	*/
 	err = sub.Receive(context.Background(), func(ctx context.Context, m *pubsub.Message) {
-		fmt.Print("Got message: ")
-		str := m.Data
-
-		file, err := os.OpenFile("operations.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+		var op OperationModel
+		err := json.Unmarshal(m.Data, &op)
 		if err != nil {
-			fmt.Println("Error in Receive: %v", err)
+			fmt.Println(err)
 		}
 
-		log.SetOutput(file)
-
-		op := extractOperation(string(str))
-		log.Println(op)
-		fmt.Println(op)
-
-		/*r, err := createOperation(op)
+		resultOp, err := createOperation(op)
 		if err != nil {
 			fmt.Println("Error in createOperation: %v", err)
 		}
-		fmt.Println(r)
-		*/
+		fmt.Println(resultOp)
+
 		m.Ack()
 	})
 	if err != nil {
@@ -113,47 +105,7 @@ func main() {
 
 }
 
-func extractOperation(str string) OperationModel {
-	var strN1, strN2, strOp, strResult string
-	if strings.ContainsAny(str, "-") {
-		strOp = "-"
-		strN1 = str[0:strings.IndexAny(str, strOp)]
-		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
-		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
-	}
-	if strings.ContainsAny(str, "+") {
-		strOp = "+"
-		strN1 = str[0:strings.IndexAny(str, strOp)]
-		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
-		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
-	}
-	if strings.ContainsAny(str, "/") {
-		strOp = "/"
-		strN1 = str[0:strings.IndexAny(str, strOp)]
-		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
-		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
-	}
-	if strings.ContainsAny(str, "*") {
-		strOp = "*"
-		strN1 = str[0:strings.IndexAny(str, strOp)]
-		strN2 = str[strings.IndexAny(str, strOp)+1 : strings.IndexAny(str, "=")]
-		strResult = str[strings.IndexAny(str, "=")+1 : len(str)]
-	}
-
-	n1, _ := strconv.ParseFloat(strN1, 64)
-	n2, _ := strconv.ParseFloat(strN2, 64)
-	result, _ := strconv.ParseFloat(strResult, 64)
-
-	return OperationModel{
-		Number1:   n1,
-		Number2:   n2,
-		Result:    result,
-		Operation: strOp,
-	}
-}
-
-/*
-func createOperation(op OperationModel) (string, error) {
+func createOperation(op OperationModel) (*OperationModel, error) {
 	dataDb := OperationModel{
 		Number1:     op.Number1,
 		Number2:     op.Number2,
@@ -164,14 +116,15 @@ func createOperation(op OperationModel) (string, error) {
 
 	result, err := OperationDb.InsertOne(MongoContext, dataDb)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	idResult := result.InsertedID.(primitive.ObjectID)
+	dataDb.Id = idResult
 
-	return idResult.Hex(), nil
+	return &dataDb, nil
 }
-*/
+
 func readEnv() error {
 	err := godotenv.Load("../.env")
 	if err != nil {
