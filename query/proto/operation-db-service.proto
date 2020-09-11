@@ -17,7 +17,7 @@ message FindByOpRequest {
 }
 
 message FindByOpResponse {
-  OperationDb operationDb = 1;
+  repeated OperationDb operations = 1;
 }
 
 message ListAllRequest {}

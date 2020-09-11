@@ -4,10 +4,10 @@ option go_package = "proto";
 
 enum enumOp {
   NULL = 0;
-  DIVISION = 1;
-  MULTIPLICATION = 2;
-  SUBTRACTION = 3;
-  SUM = 4;
+  DIVISION = 100;
+  MULTIPLICATION = 200;
+  SUBTRACTION = 300;
+  SUM = 400;
 }
 
 message OperationDb {
@@ -15,6 +15,6 @@ message OperationDb {
   double number1 = 2;
   double number2 = 3;
   double result = 4;
-  enumOp operation = 5;
+  string operation = 5;
   string dateCreated = 6;
 }
