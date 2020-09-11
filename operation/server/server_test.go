@@ -63,6 +63,20 @@ func TestDivision(t *testing.T) {
 			},
 			result: 10,
 		},
+		InterfaceTest{
+			op: OperationModel{
+				number1: 10,
+				number2: 5,
+			},
+			result: 2,
+		},
+		InterfaceTest{
+			op: OperationModel{
+				number1: 10,
+				number2: 0,
+			},
+			result: 0,
+		},
 	}
 
 	t.Run("Division",
