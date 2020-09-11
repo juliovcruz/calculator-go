@@ -99,3 +99,99 @@ func TestDivision(t *testing.T) {
 	)
 
 }
+
+func TestMultiplication(t *testing.T) {
+	s := OperationServiceServer{}
+
+	sliceTest := []InterfaceTest{
+		InterfaceTest{
+			op: OperationModel{
+				number1: 20,
+				number2: 2,
+			},
+			result: 40,
+		},
+		InterfaceTest{
+			op: OperationModel{
+				number1: 10,
+				number2: 5,
+			},
+			result: 50,
+		},
+		InterfaceTest{
+			op: OperationModel{
+				number1: 10,
+				number2: 0,
+			},
+			result: 0,
+		},
+	}
+
+	t.Run("Multiplication",
+		func(t *testing.T) {
+			for _, value := range sliceTest {
+				res, err := s.Multiplication(context.Background(),
+					&proto.MultiplicationRequest{
+						Operation: &proto.Operation{
+							Number1: value.op.number1,
+							Number2: value.op.number2,
+						},
+					},
+				)
+				if err != nil {
+					t.Fatalf("Error in execution method %v:", err)
+				}
+				assert.Equal(t, value.result, res.Result)
+			}
+		},
+	)
+
+}
+
+func TestSubtraction(t *testing.T) {
+	s := OperationServiceServer{}
+
+	sliceTest := []InterfaceTest{
+		InterfaceTest{
+			op: OperationModel{
+				number1: 20,
+				number2: 2,
+			},
+			result: 18,
+		},
+		InterfaceTest{
+			op: OperationModel{
+				number1: 10,
+				number2: 5,
+			},
+			result: 5,
+		},
+		InterfaceTest{
+			op: OperationModel{
+				number1: 10,
+				number2: 0,
+			},
+			result: 10,
+		},
+	}
+
+	t.Run("Subtraction",
+		func(t *testing.T) {
+			for _, value := range sliceTest {
+				res, err := s.Subtraction(context.Background(),
+					&proto.SubtractionRequest{
+						Operation: &proto.Operation{
+							Number1: value.op.number1,
+							Number2: value.op.number2,
+						},
+					},
+				)
+				if err != nil {
+					t.Fatalf("Error in execution method %v:", err)
+				}
+				assert.Equal(t, value.result, res.Result)
+			}
+		},
+	)
+
+}
