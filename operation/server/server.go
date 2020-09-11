@@ -8,6 +8,10 @@ import (
 	"os"
 
 	"github.com/juliovcruz/calculator-go/operation/proto"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/joho/godotenv"
@@ -15,6 +19,11 @@ import (
 )
 
 var SERVER_PORT, PROJECT_ID, TOPIC_ID, SUB_ID string
+var QUERY_PORT, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS string
+
+var Db *mongo.Client
+var OperationCollection *mongo.Collection
+var MongoContext context.Context
 
 type ServerOptions struct {
 	Pubsub bool
@@ -25,16 +34,17 @@ type OperationServiceServer struct {
 }
 
 type Operation struct {
-	Number1   float64
-	Number2   float64
-	Result    float64
-	Operation string
+	Id          primitive.ObjectID `bson:"_id,omitempty"`
+	Number1     float64            `bson:"number1"`
+	Operation   string             `bson:"operation"`
+	Number2     float64            `bson:"number2"`
+	Result      float64            `bson:"result"`
+	DateCreated string             `bson:"dateCreated"`
 }
 
 func (s *OperationServiceServer) Division(ctx context.Context, req *proto.DivisionRequest) (*proto.DivisionResponse, error) {
-	data := req.GetOperation()
-	num1 := data.GetNumber1()
-	num2 := data.GetNumber2()
+	num1 := req.GetNumber1()
+	num2 := req.GetNumber2()
 
 	result := num1 / num2
 
@@ -58,9 +68,8 @@ func (s *OperationServiceServer) Division(ctx context.Context, req *proto.Divisi
 }
 
 func (s *OperationServiceServer) Multiplication(ctx context.Context, req *proto.MultiplicationRequest) (*proto.MultiplicationResponse, error) {
-	data := req.GetOperation()
-	num1 := data.GetNumber1()
-	num2 := data.GetNumber2()
+	num1 := req.GetNumber1()
+	num2 := req.GetNumber2()
 
 	result := num1 * num2
 
@@ -80,9 +89,8 @@ func (s *OperationServiceServer) Multiplication(ctx context.Context, req *proto.
 }
 
 func (s *OperationServiceServer) Sum(ctx context.Context, req *proto.SumRequest) (*proto.SumResponse, error) {
-	data := req.GetOperation()
-	num1 := data.GetNumber1()
-	num2 := data.GetNumber2()
+	num1 := req.GetNumber1()
+	num2 := req.GetNumber2()
 
 	result := num1 + num2
 
@@ -102,9 +110,8 @@ func (s *OperationServiceServer) Sum(ctx context.Context, req *proto.SumRequest)
 }
 
 func (s *OperationServiceServer) Subtraction(ctx context.Context, req *proto.SubtractionRequest) (*proto.SubtractionResponse, error) {
-	data := req.GetOperation()
-	num1 := data.GetNumber1()
-	num2 := data.GetNumber2()
+	num1 := req.GetNumber1()
+	num2 := req.GetNumber2()
 
 	result := num1 - num2
 
@@ -123,7 +130,110 @@ func (s *OperationServiceServer) Subtraction(ctx context.Context, req *proto.Sub
 	return &proto.SubtractionResponse{Result: result}, nil
 }
 
-func NewServer(ctx context.Context, options ServerOptions) error {
+func (s *OperationServiceServer) FindById(ctx context.Context, req *proto.FindByIdRequest) (*proto.FindByIdResponse, error) {
+	id, err := primitive.ObjectIDFromHex(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	result := OperationCollection.FindOne(ctx, bson.M{"_id": id})
+	data := Operation{}
+	if err := result.Decode(&data); err != nil {
+		return nil, err
+	}
+
+	response := &proto.FindByIdResponse{
+		Operation: &proto.Operation{
+			//Id:          id.Hex(),
+			Number1:     data.Number1,
+			Operation:   data.Operation,
+			Number2:     data.Number2,
+			Result:      data.Result,
+			DateCreated: data.DateCreated,
+		},
+	}
+
+	return response, nil
+
+}
+
+func (s *OperationServiceServer) FindByOp(ctx context.Context, req *proto.FindByOpRequest) (*proto.FindByOpResponse, error) {
+
+	cursor, err := OperationCollection.Find(ctx, bson.M{"operation": req.GetOp().String()})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var results []*proto.Operation
+
+	for cursor.Next(context.TODO()) {
+
+		var elem Operation
+		err := cursor.Decode(&elem)
+		if err != nil {
+			return nil, err
+		}
+
+		elemResult := proto.Operation{
+			Id:          elem.Id.Hex(),
+			Number1:     elem.Number1,
+			Operation:   elem.Operation,
+			Number2:     elem.Number2,
+			Result:      elem.Result,
+			DateCreated: elem.DateCreated,
+		}
+
+		results = append(results, &elemResult)
+	}
+
+	response := &proto.FindByOpResponse{
+		Operations: results,
+	}
+
+	return response, nil
+
+}
+
+func (s *OperationServiceServer) ListAll(ctx context.Context, req *proto.ListAllRequest) (*proto.ListAllResponse, error) {
+
+	cursor, err := OperationCollection.Find(ctx, bson.D{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var results []*proto.Operation
+
+	for cursor.Next(context.TODO()) {
+
+		var elem Operation
+		err := cursor.Decode(&elem)
+		if err != nil {
+			return nil, err
+		}
+
+		elemResult := proto.Operation{
+			Id:          elem.Id.Hex(),
+			Number1:     elem.Number1,
+			Operation:   elem.Operation,
+			Number2:     elem.Number2,
+			Result:      elem.Result,
+			DateCreated: elem.DateCreated,
+		}
+
+		results = append(results, &elemResult)
+	}
+
+	response := &proto.ListAllResponse{
+		Operations: results,
+	}
+
+	return response, nil
+
+}
+
+func NewServer(ctx context.Context, serverOptions ServerOptions) error {
 
 	err := readEnv()
 	if err != nil {
@@ -137,7 +247,7 @@ func NewServer(ctx context.Context, options ServerOptions) error {
 
 	serverOperation := &OperationServiceServer{}
 
-	if options.Pubsub {
+	if serverOptions.Pubsub {
 		clientPubSub, err := pubsub.NewClient(ctx, PROJECT_ID)
 		if err != nil {
 			return err
@@ -158,6 +268,20 @@ func NewServer(ctx context.Context, options ServerOptions) error {
 		}
 		fmt.Println(sub)
 	}
+
+	MongoContext = context.Background()
+
+	Db, err = mongo.Connect(MongoContext,
+		options.Client().ApplyURI("mongodb://"+DB_HOST+":"+DB_PORT+"/"))
+	if err != nil {
+		return err
+	}
+
+	err = Db.Ping(MongoContext, nil)
+	if err != nil {
+		return err
+	}
+	OperationCollection = Db.Database("calculator-go").Collection("operations")
 
 	grpcServer := grpc.NewServer()
 
@@ -180,6 +304,11 @@ func readEnv() error {
 	PROJECT_ID = os.Getenv("PROJECT_ID")
 	TOPIC_ID = os.Getenv("TOPIC_ID")
 	SUB_ID = os.Getenv("SUB_ID")
+	DB_HOST = os.Getenv("DB_HOST")
+	DB_PORT = os.Getenv("DB_PORT")
+	DB_NAME = os.Getenv("DB_NAME")
+	DB_USER = os.Getenv("DB_USER")
+	DB_PASS = os.Getenv("DB_PASS")
 
 	return nil
 }

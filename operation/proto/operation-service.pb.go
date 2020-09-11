@@ -25,10 +25,11 @@ var _ = math.Inf
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type SumRequest struct {
-	Operation            *Operation `protobuf:"bytes,1,opt,name=operation,proto3" json:"operation,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	Number1              float64  `protobuf:"fixed64,1,opt,name=number1,proto3" json:"number1,omitempty"`
+	Number2              float64  `protobuf:"fixed64,2,opt,name=number2,proto3" json:"number2,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *SumRequest) Reset()         { *m = SumRequest{} }
@@ -56,11 +57,18 @@ func (m *SumRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SumRequest proto.InternalMessageInfo
 
-func (m *SumRequest) GetOperation() *Operation {
+func (m *SumRequest) GetNumber1() float64 {
 	if m != nil {
-		return m.Operation
+		return m.Number1
 	}
-	return nil
+	return 0
+}
+
+func (m *SumRequest) GetNumber2() float64 {
+	if m != nil {
+		return m.Number2
+	}
+	return 0
 }
 
 type SumResponse struct {
@@ -103,10 +111,11 @@ func (m *SumResponse) GetResult() float64 {
 }
 
 type MultiplicationRequest struct {
-	Operation            *Operation `protobuf:"bytes,1,opt,name=operation,proto3" json:"operation,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	Number1              float64  `protobuf:"fixed64,1,opt,name=number1,proto3" json:"number1,omitempty"`
+	Number2              float64  `protobuf:"fixed64,2,opt,name=number2,proto3" json:"number2,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *MultiplicationRequest) Reset()         { *m = MultiplicationRequest{} }
@@ -134,11 +143,18 @@ func (m *MultiplicationRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MultiplicationRequest proto.InternalMessageInfo
 
-func (m *MultiplicationRequest) GetOperation() *Operation {
+func (m *MultiplicationRequest) GetNumber1() float64 {
 	if m != nil {
-		return m.Operation
+		return m.Number1
 	}
-	return nil
+	return 0
+}
+
+func (m *MultiplicationRequest) GetNumber2() float64 {
+	if m != nil {
+		return m.Number2
+	}
+	return 0
 }
 
 type MultiplicationResponse struct {
@@ -181,10 +197,11 @@ func (m *MultiplicationResponse) GetResult() float64 {
 }
 
 type DivisionRequest struct {
-	Operation            *Operation `protobuf:"bytes,1,opt,name=operation,proto3" json:"operation,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	Number1              float64  `protobuf:"fixed64,1,opt,name=number1,proto3" json:"number1,omitempty"`
+	Number2              float64  `protobuf:"fixed64,2,opt,name=number2,proto3" json:"number2,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *DivisionRequest) Reset()         { *m = DivisionRequest{} }
@@ -212,11 +229,18 @@ func (m *DivisionRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DivisionRequest proto.InternalMessageInfo
 
-func (m *DivisionRequest) GetOperation() *Operation {
+func (m *DivisionRequest) GetNumber1() float64 {
 	if m != nil {
-		return m.Operation
+		return m.Number1
 	}
-	return nil
+	return 0
+}
+
+func (m *DivisionRequest) GetNumber2() float64 {
+	if m != nil {
+		return m.Number2
+	}
+	return 0
 }
 
 type DivisionResponse struct {
@@ -259,10 +283,11 @@ func (m *DivisionResponse) GetResult() float64 {
 }
 
 type SubtractionRequest struct {
-	Operation            *Operation `protobuf:"bytes,1,opt,name=operation,proto3" json:"operation,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	Number1              float64  `protobuf:"fixed64,1,opt,name=number1,proto3" json:"number1,omitempty"`
+	Number2              float64  `protobuf:"fixed64,2,opt,name=number2,proto3" json:"number2,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *SubtractionRequest) Reset()         { *m = SubtractionRequest{} }
@@ -290,11 +315,18 @@ func (m *SubtractionRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SubtractionRequest proto.InternalMessageInfo
 
-func (m *SubtractionRequest) GetOperation() *Operation {
+func (m *SubtractionRequest) GetNumber1() float64 {
 	if m != nil {
-		return m.Operation
+		return m.Number1
 	}
-	return nil
+	return 0
+}
+
+func (m *SubtractionRequest) GetNumber2() float64 {
+	if m != nil {
+		return m.Number2
+	}
+	return 0
 }
 
 type SubtractionResponse struct {
@@ -336,6 +368,232 @@ func (m *SubtractionResponse) GetResult() float64 {
 	return 0
 }
 
+type FindByIdRequest struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FindByIdRequest) Reset()         { *m = FindByIdRequest{} }
+func (m *FindByIdRequest) String() string { return proto.CompactTextString(m) }
+func (*FindByIdRequest) ProtoMessage()    {}
+func (*FindByIdRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3ecdeba5886db1db, []int{8}
+}
+
+func (m *FindByIdRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindByIdRequest.Unmarshal(m, b)
+}
+func (m *FindByIdRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindByIdRequest.Marshal(b, m, deterministic)
+}
+func (m *FindByIdRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindByIdRequest.Merge(m, src)
+}
+func (m *FindByIdRequest) XXX_Size() int {
+	return xxx_messageInfo_FindByIdRequest.Size(m)
+}
+func (m *FindByIdRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindByIdRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindByIdRequest proto.InternalMessageInfo
+
+func (m *FindByIdRequest) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type FindByIdResponse struct {
+	Operation            *Operation `protobuf:"bytes,1,opt,name=operation,proto3" json:"operation,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *FindByIdResponse) Reset()         { *m = FindByIdResponse{} }
+func (m *FindByIdResponse) String() string { return proto.CompactTextString(m) }
+func (*FindByIdResponse) ProtoMessage()    {}
+func (*FindByIdResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3ecdeba5886db1db, []int{9}
+}
+
+func (m *FindByIdResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindByIdResponse.Unmarshal(m, b)
+}
+func (m *FindByIdResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindByIdResponse.Marshal(b, m, deterministic)
+}
+func (m *FindByIdResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindByIdResponse.Merge(m, src)
+}
+func (m *FindByIdResponse) XXX_Size() int {
+	return xxx_messageInfo_FindByIdResponse.Size(m)
+}
+func (m *FindByIdResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindByIdResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindByIdResponse proto.InternalMessageInfo
+
+func (m *FindByIdResponse) GetOperation() *Operation {
+	if m != nil {
+		return m.Operation
+	}
+	return nil
+}
+
+type FindByOpRequest struct {
+	Op                   EnumOp   `protobuf:"varint,1,opt,name=op,proto3,enum=EnumOp" json:"op,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *FindByOpRequest) Reset()         { *m = FindByOpRequest{} }
+func (m *FindByOpRequest) String() string { return proto.CompactTextString(m) }
+func (*FindByOpRequest) ProtoMessage()    {}
+func (*FindByOpRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3ecdeba5886db1db, []int{10}
+}
+
+func (m *FindByOpRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindByOpRequest.Unmarshal(m, b)
+}
+func (m *FindByOpRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindByOpRequest.Marshal(b, m, deterministic)
+}
+func (m *FindByOpRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindByOpRequest.Merge(m, src)
+}
+func (m *FindByOpRequest) XXX_Size() int {
+	return xxx_messageInfo_FindByOpRequest.Size(m)
+}
+func (m *FindByOpRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindByOpRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindByOpRequest proto.InternalMessageInfo
+
+func (m *FindByOpRequest) GetOp() EnumOp {
+	if m != nil {
+		return m.Op
+	}
+	return EnumOp_NULL
+}
+
+type FindByOpResponse struct {
+	Operations           []*Operation `protobuf:"bytes,1,rep,name=operations,proto3" json:"operations,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *FindByOpResponse) Reset()         { *m = FindByOpResponse{} }
+func (m *FindByOpResponse) String() string { return proto.CompactTextString(m) }
+func (*FindByOpResponse) ProtoMessage()    {}
+func (*FindByOpResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3ecdeba5886db1db, []int{11}
+}
+
+func (m *FindByOpResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindByOpResponse.Unmarshal(m, b)
+}
+func (m *FindByOpResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindByOpResponse.Marshal(b, m, deterministic)
+}
+func (m *FindByOpResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindByOpResponse.Merge(m, src)
+}
+func (m *FindByOpResponse) XXX_Size() int {
+	return xxx_messageInfo_FindByOpResponse.Size(m)
+}
+func (m *FindByOpResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindByOpResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_FindByOpResponse proto.InternalMessageInfo
+
+func (m *FindByOpResponse) GetOperations() []*Operation {
+	if m != nil {
+		return m.Operations
+	}
+	return nil
+}
+
+type ListAllRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListAllRequest) Reset()         { *m = ListAllRequest{} }
+func (m *ListAllRequest) String() string { return proto.CompactTextString(m) }
+func (*ListAllRequest) ProtoMessage()    {}
+func (*ListAllRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3ecdeba5886db1db, []int{12}
+}
+
+func (m *ListAllRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListAllRequest.Unmarshal(m, b)
+}
+func (m *ListAllRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListAllRequest.Marshal(b, m, deterministic)
+}
+func (m *ListAllRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllRequest.Merge(m, src)
+}
+func (m *ListAllRequest) XXX_Size() int {
+	return xxx_messageInfo_ListAllRequest.Size(m)
+}
+func (m *ListAllRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllRequest proto.InternalMessageInfo
+
+type ListAllResponse struct {
+	Operations           []*Operation `protobuf:"bytes,1,rep,name=operations,proto3" json:"operations,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *ListAllResponse) Reset()         { *m = ListAllResponse{} }
+func (m *ListAllResponse) String() string { return proto.CompactTextString(m) }
+func (*ListAllResponse) ProtoMessage()    {}
+func (*ListAllResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3ecdeba5886db1db, []int{13}
+}
+
+func (m *ListAllResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListAllResponse.Unmarshal(m, b)
+}
+func (m *ListAllResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListAllResponse.Marshal(b, m, deterministic)
+}
+func (m *ListAllResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListAllResponse.Merge(m, src)
+}
+func (m *ListAllResponse) XXX_Size() int {
+	return xxx_messageInfo_ListAllResponse.Size(m)
+}
+func (m *ListAllResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListAllResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListAllResponse proto.InternalMessageInfo
+
+func (m *ListAllResponse) GetOperations() []*Operation {
+	if m != nil {
+		return m.Operations
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*SumRequest)(nil), "SumRequest")
 	proto.RegisterType((*SumResponse)(nil), "SumResponse")
@@ -345,6 +603,12 @@ func init() {
 	proto.RegisterType((*DivisionResponse)(nil), "DivisionResponse")
 	proto.RegisterType((*SubtractionRequest)(nil), "SubtractionRequest")
 	proto.RegisterType((*SubtractionResponse)(nil), "SubtractionResponse")
+	proto.RegisterType((*FindByIdRequest)(nil), "FindByIdRequest")
+	proto.RegisterType((*FindByIdResponse)(nil), "FindByIdResponse")
+	proto.RegisterType((*FindByOpRequest)(nil), "FindByOpRequest")
+	proto.RegisterType((*FindByOpResponse)(nil), "FindByOpResponse")
+	proto.RegisterType((*ListAllRequest)(nil), "ListAllRequest")
+	proto.RegisterType((*ListAllResponse)(nil), "ListAllResponse")
 }
 
 func init() {
@@ -352,24 +616,34 @@ func init() {
 }
 
 var fileDescriptor_3ecdeba5886db1db = []byte{
-	// 268 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0x12, 0xcf, 0x2f, 0x48, 0x2d,
-	0x4a, 0x2c, 0xc9, 0xcc, 0xcf, 0xd3, 0x2d, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0xd5, 0x2b, 0x28,
-	0xca, 0x2f, 0xc9, 0x97, 0xe2, 0x87, 0x4b, 0x40, 0x04, 0x94, 0xcc, 0xb8, 0xb8, 0x82, 0x4b, 0x73,
-	0x83, 0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0x34, 0xb8, 0x38, 0xe1, 0x0a, 0x24, 0x18, 0x15,
-	0x18, 0x35, 0xb8, 0x8d, 0xb8, 0xf4, 0xfc, 0x61, 0x22, 0x41, 0x08, 0x49, 0x25, 0x55, 0x2e, 0x6e,
-	0xb0, 0xbe, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x21, 0x31, 0x2e, 0xb6, 0xa2, 0xd4, 0xe2, 0xd2,
-	0x9c, 0x12, 0xb0, 0x2e, 0xc6, 0x20, 0x28, 0x4f, 0xc9, 0x91, 0x4b, 0xd4, 0x17, 0x48, 0x67, 0x16,
-	0xe4, 0x64, 0x26, 0x43, 0xcc, 0x20, 0xd9, 0x26, 0x03, 0x2e, 0x31, 0x74, 0x23, 0x08, 0x58, 0x6a,
-	0xcd, 0xc5, 0xef, 0x92, 0x59, 0x96, 0x59, 0x4c, 0x96, 0x75, 0x5a, 0x5c, 0x02, 0x08, 0xcd, 0x04,
-	0x2c, 0xb2, 0xe3, 0x12, 0x0a, 0x2e, 0x4d, 0x2a, 0x29, 0x4a, 0x4c, 0x26, 0xcf, 0x6b, 0xba, 0x5c,
-	0xc2, 0x28, 0xfa, 0xf1, 0x5b, 0x67, 0xf4, 0x88, 0x91, 0x4b, 0x00, 0x6e, 0x4e, 0x30, 0x24, 0x5e,
-	0x85, 0x14, 0xb8, 0x98, 0x81, 0x11, 0x21, 0xc4, 0xad, 0x87, 0x88, 0x46, 0x29, 0x1e, 0x3d, 0xe4,
-	0xb8, 0x71, 0xe4, 0xe2, 0x43, 0x0d, 0x40, 0x21, 0x31, 0x3d, 0xac, 0x91, 0x22, 0x25, 0xae, 0x87,
-	0x23, 0xa4, 0xf5, 0xb9, 0x38, 0x60, 0x81, 0x22, 0x24, 0xa0, 0x87, 0x16, 0xb8, 0x52, 0x82, 0x7a,
-	0x18, 0x21, 0x66, 0x01, 0x4a, 0x1e, 0x70, 0x9f, 0x09, 0x09, 0xeb, 0x61, 0x86, 0x93, 0x94, 0x88,
-	0x1e, 0x16, 0xcf, 0x3b, 0xb1, 0x47, 0xb1, 0x82, 0x53, 0x66, 0x12, 0x1b, 0x98, 0x32, 0x06, 0x04,
-	0x00, 0x00, 0xff, 0xff, 0x27, 0x60, 0xb8, 0xa2, 0xcc, 0x02, 0x00, 0x00,
+	// 417 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xa4, 0x94, 0xcd, 0x4e, 0xf2, 0x40,
+	0x18, 0x85, 0x43, 0xc9, 0x47, 0x3f, 0x5e, 0x4c, 0x5b, 0x07, 0x05, 0xd2, 0x15, 0x36, 0x31, 0x21,
+	0x44, 0x46, 0xad, 0x1b, 0x17, 0x6a, 0x84, 0xa8, 0xd1, 0xa8, 0x21, 0x29, 0x3b, 0x77, 0xfc, 0xcc,
+	0x62, 0x92, 0xd2, 0xd6, 0x4e, 0x4b, 0xe2, 0x6d, 0x7b, 0x05, 0x0e, 0xa5, 0x33, 0x2d, 0x05, 0x43,
+	0x0c, 0xab, 0xd2, 0xf7, 0xe7, 0x3c, 0x03, 0xe7, 0x0c, 0xd0, 0xf4, 0x03, 0x12, 0x8e, 0x23, 0xea,
+	0x7b, 0x3d, 0x46, 0xc2, 0x05, 0x9d, 0x12, 0x1c, 0x84, 0x7e, 0xe4, 0x9b, 0xba, 0x6c, 0xac, 0x0a,
+	0xd6, 0x3d, 0xc0, 0x28, 0x9e, 0x3b, 0xe4, 0x33, 0x26, 0x2c, 0x42, 0x2d, 0x50, 0xbd, 0x78, 0x3e,
+	0x21, 0xe1, 0x65, 0xab, 0xd4, 0x2e, 0x75, 0x4a, 0x8e, 0x78, 0xcd, 0x3a, 0x76, 0x4b, 0xc9, 0x77,
+	0x6c, 0xeb, 0x14, 0x6a, 0x89, 0x02, 0x0b, 0x7c, 0x8f, 0x11, 0xd4, 0x80, 0x4a, 0x48, 0x58, 0xec,
+	0x46, 0xa9, 0x42, 0xfa, 0x66, 0xbd, 0xc2, 0xf1, 0x3b, 0x7f, 0xd2, 0xc0, 0xa5, 0xd3, 0xe4, 0x00,
+	0xfb, 0x30, 0x2f, 0xa0, 0x51, 0x14, 0xdb, 0x81, 0x7f, 0x04, 0xfd, 0x81, 0x2e, 0x28, 0xdb, 0x13,
+	0xdc, 0x05, 0x23, 0x93, 0xd9, 0x81, 0x7c, 0x06, 0x34, 0x8a, 0x27, 0x51, 0x38, 0x9e, 0xee, 0xfb,
+	0x75, 0x7b, 0x50, 0x5f, 0x53, 0xda, 0x01, 0x3e, 0x01, 0xfd, 0x89, 0x7a, 0xb3, 0xc1, 0xd7, 0xcb,
+	0x4c, 0x50, 0x35, 0x50, 0xe8, 0x2c, 0x19, 0xab, 0x3a, 0xfc, 0x93, 0x75, 0x03, 0x46, 0x36, 0x92,
+	0xca, 0x75, 0xa0, 0x2a, 0xd3, 0x91, 0x8c, 0xd6, 0x6c, 0xc0, 0x43, 0x51, 0x71, 0xb2, 0x26, 0xff,
+	0x15, 0x52, 0xc0, 0x30, 0x10, 0x80, 0x26, 0x28, 0x7e, 0x90, 0x6c, 0x69, 0xb6, 0x8a, 0x09, 0x3f,
+	0x39, 0xef, 0xf1, 0x92, 0x75, 0x27, 0x48, 0xcb, 0xd9, 0x94, 0xd4, 0x05, 0x90, 0x62, 0x8c, 0x2f,
+	0x95, 0x0b, 0xa8, 0x5c, 0xd7, 0x32, 0x40, 0x7b, 0xa3, 0x2c, 0xea, 0xbb, 0x6e, 0x8a, 0xb2, 0x6e,
+	0x41, 0x97, 0x95, 0xbf, 0x0b, 0xda, 0xdf, 0x0a, 0x18, 0xb2, 0x33, 0x5a, 0xdd, 0x0e, 0xd4, 0x86,
+	0x32, 0x0f, 0x31, 0xaa, 0xe1, 0xec, 0x32, 0x98, 0x07, 0x38, 0x9f, 0xeb, 0x3e, 0x68, 0xeb, 0x91,
+	0x43, 0x0d, 0xbc, 0x35, 0xd0, 0x66, 0x13, 0xff, 0x92, 0xcd, 0x73, 0xf8, 0x2f, 0xc2, 0x83, 0x0c,
+	0x5c, 0x88, 0xa3, 0x79, 0x88, 0x37, 0x92, 0x75, 0xbd, 0xbc, 0x5a, 0xd2, 0x77, 0x54, 0xc7, 0x9b,
+	0x79, 0x32, 0x8f, 0xf0, 0xb6, 0x68, 0x70, 0x94, 0xf0, 0x97, 0xa3, 0x0a, 0x69, 0xe0, 0xa8, 0x0d,
+	0xf3, 0xe5, 0xc2, 0x30, 0x90, 0x0b, 0xd2, 0x5d, 0xb9, 0x90, 0xf3, 0xf0, 0x0c, 0xd4, 0xd4, 0x05,
+	0xa4, 0xe3, 0x75, 0x87, 0x4c, 0x03, 0x17, 0x0c, 0x1a, 0xa8, 0x1f, 0xff, 0x92, 0xff, 0x9b, 0x49,
+	0x25, 0x79, 0x5c, 0xfd, 0x04, 0x00, 0x00, 0xff, 0xff, 0x20, 0xe9, 0x8d, 0xc0, 0xa2, 0x04, 0x00,
+	0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -388,6 +662,9 @@ type OperationServiceClient interface {
 	Multiplication(ctx context.Context, in *MultiplicationRequest, opts ...grpc.CallOption) (*MultiplicationResponse, error)
 	Division(ctx context.Context, in *DivisionRequest, opts ...grpc.CallOption) (*DivisionResponse, error)
 	Subtraction(ctx context.Context, in *SubtractionRequest, opts ...grpc.CallOption) (*SubtractionResponse, error)
+	FindById(ctx context.Context, in *FindByIdRequest, opts ...grpc.CallOption) (*FindByIdResponse, error)
+	FindByOp(ctx context.Context, in *FindByOpRequest, opts ...grpc.CallOption) (*FindByOpResponse, error)
+	ListAll(ctx context.Context, in *ListAllRequest, opts ...grpc.CallOption) (*ListAllResponse, error)
 }
 
 type operationServiceClient struct {
@@ -434,12 +711,42 @@ func (c *operationServiceClient) Subtraction(ctx context.Context, in *Subtractio
 	return out, nil
 }
 
+func (c *operationServiceClient) FindById(ctx context.Context, in *FindByIdRequest, opts ...grpc.CallOption) (*FindByIdResponse, error) {
+	out := new(FindByIdResponse)
+	err := c.cc.Invoke(ctx, "/OperationService/FindById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *operationServiceClient) FindByOp(ctx context.Context, in *FindByOpRequest, opts ...grpc.CallOption) (*FindByOpResponse, error) {
+	out := new(FindByOpResponse)
+	err := c.cc.Invoke(ctx, "/OperationService/FindByOp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *operationServiceClient) ListAll(ctx context.Context, in *ListAllRequest, opts ...grpc.CallOption) (*ListAllResponse, error) {
+	out := new(ListAllResponse)
+	err := c.cc.Invoke(ctx, "/OperationService/ListAll", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OperationServiceServer is the server API for OperationService service.
 type OperationServiceServer interface {
 	Sum(context.Context, *SumRequest) (*SumResponse, error)
 	Multiplication(context.Context, *MultiplicationRequest) (*MultiplicationResponse, error)
 	Division(context.Context, *DivisionRequest) (*DivisionResponse, error)
 	Subtraction(context.Context, *SubtractionRequest) (*SubtractionResponse, error)
+	FindById(context.Context, *FindByIdRequest) (*FindByIdResponse, error)
+	FindByOp(context.Context, *FindByOpRequest) (*FindByOpResponse, error)
+	ListAll(context.Context, *ListAllRequest) (*ListAllResponse, error)
 }
 
 // UnimplementedOperationServiceServer can be embedded to have forward compatible implementations.
@@ -457,6 +764,15 @@ func (*UnimplementedOperationServiceServer) Division(ctx context.Context, req *D
 }
 func (*UnimplementedOperationServiceServer) Subtraction(ctx context.Context, req *SubtractionRequest) (*SubtractionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Subtraction not implemented")
+}
+func (*UnimplementedOperationServiceServer) FindById(ctx context.Context, req *FindByIdRequest) (*FindByIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindById not implemented")
+}
+func (*UnimplementedOperationServiceServer) FindByOp(ctx context.Context, req *FindByOpRequest) (*FindByOpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByOp not implemented")
+}
+func (*UnimplementedOperationServiceServer) ListAll(ctx context.Context, req *ListAllRequest) (*ListAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAll not implemented")
 }
 
 func RegisterOperationServiceServer(s *grpc.Server, srv OperationServiceServer) {
@@ -535,6 +851,60 @@ func _OperationService_Subtraction_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OperationService_FindById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OperationServiceServer).FindById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/OperationService/FindById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OperationServiceServer).FindById(ctx, req.(*FindByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OperationService_FindByOp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindByOpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OperationServiceServer).FindByOp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/OperationService/FindByOp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OperationServiceServer).FindByOp(ctx, req.(*FindByOpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OperationService_ListAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListAllRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OperationServiceServer).ListAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/OperationService/ListAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OperationServiceServer).ListAll(ctx, req.(*ListAllRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _OperationService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "OperationService",
 	HandlerType: (*OperationServiceServer)(nil),
@@ -554,6 +924,18 @@ var _OperationService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Subtraction",
 			Handler:    _OperationService_Subtraction_Handler,
+		},
+		{
+			MethodName: "FindById",
+			Handler:    _OperationService_FindById_Handler,
+		},
+		{
+			MethodName: "FindByOp",
+			Handler:    _OperationService_FindByOp_Handler,
+		},
+		{
+			MethodName: "ListAll",
+			Handler:    _OperationService_ListAll_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
