@@ -6,7 +6,8 @@ import (
 	"log"
 	"net"
 	"os"
-	"query/proto"
+
+	"github.com/juliovcruz/calculator-go/query/proto"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
@@ -118,13 +119,22 @@ func (s *OperationDbServiceServer) ListAll(ctx context.Context, req *proto.ListA
 
 	for cursor.Next(context.TODO()) {
 
-		var elem proto.OperationDb
+		var elem OperationModel
 		err := cursor.Decode(&elem)
 		if err != nil {
 			return nil, err
 		}
 
-		results = append(results, &elem)
+		elemResult := proto.OperationDb{
+			Id:          elem.Id.Hex(),
+			Number1:     elem.Number1,
+			Operation:   elem.Operation,
+			Number2:     elem.Number2,
+			Result:      elem.Result,
+			DateCreated: elem.DateCreated,
+		}
+
+		results = append(results, &elemResult)
 	}
 
 	response := &proto.ListAllResponse{

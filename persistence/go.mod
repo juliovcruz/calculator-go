@@ -1,4 +1,4 @@
-module persistence
+module github.com/juliovcruz/calculator-go/persistence
 
 go 1.14
 

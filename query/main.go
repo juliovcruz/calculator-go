@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"query/server"
+
+	"github.com/juliovcruz/calculator-go/query/server"
 )
 
 func main() {

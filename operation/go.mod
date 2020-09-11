@@ -1,4 +1,4 @@
-module operation
+module github.com/juliovcruz/calculator-go/operation
 
 go 1.14
 

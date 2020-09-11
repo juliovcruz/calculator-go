@@ -72,8 +72,6 @@ func main() {
 	}
 	OperationDb = Db.Database("calculator-go").Collection("operations")
 
-	fmt.Println("Server successfully started on port:" + SERVER_PORT)
-
 	err = sub.Receive(context.Background(), func(ctx context.Context, m *pubsub.Message) {
 		var op OperationModel
 		err := json.Unmarshal(m.Data, &op)

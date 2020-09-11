@@ -5,8 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"operation/proto"
 	"os"
+
+	"github.com/juliovcruz/calculator-go/operation/proto"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/joho/godotenv"

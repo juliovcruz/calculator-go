@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"log"
-	"operation/server"
+
+	"github.com/juliovcruz/calculator-go/operation/server"
 )
 
 func main() {

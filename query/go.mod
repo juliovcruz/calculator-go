@@ -1,4 +1,4 @@
-module query
+module github.com/juliovcruz/calculator-go/query
 
 go 1.14
 

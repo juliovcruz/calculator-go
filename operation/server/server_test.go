@@ -2,8 +2,9 @@ package server
 
 import (
 	"context"
-	"operation/proto"
 	"testing"
+
+	"github.com/juliovcruz/calculator-go/operation/proto"
 
 	"github.com/stretchr/testify/assert"
 )
