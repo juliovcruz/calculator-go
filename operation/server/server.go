@@ -19,6 +19,10 @@ var PROJECT_ID string
 var TOPIC_ID string
 var SUB_ID string
 
+type ServerOptions struct {
+	Pubsub bool
+}
+
 type OperationServiceServer struct {
 	topic *pubsub.Topic
 }
@@ -122,7 +126,7 @@ func (s *OperationServiceServer) Subtraction(ctx context.Context, req *proto.Sub
 	return &proto.SubtractionResponse{Result: result}, nil
 }
 
-func NewServer(ctx context.Context, optionPubSub bool) error {
+func NewServer(ctx context.Context, options ServerOptions) error {
 
 	err := readEnv()
 	if err != nil {
@@ -136,7 +140,7 @@ func NewServer(ctx context.Context, optionPubSub bool) error {
 
 	serverOperation := &OperationServiceServer{}
 
-	if optionPubSub {
+	if options.Pubsub {
 		clientPubSub, err := pubsub.NewClient(ctx, PROJECT_ID)
 		if err != nil {
 			return err
