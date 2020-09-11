@@ -3,15 +3,30 @@ package server
 import (
 	"context"
 	"fmt"
+	"log"
 	"net"
+	"os"
 	"query/proto"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"google.golang.org/grpc"
 )
+
+var TEST_PORT string
+var SERVER_PORT string
+var QUERY_PORT string
+var PROJECT_ID string
+var TOPIC_ID string
+var SUB_ID string
+var DB_HOST string
+var DB_PORT string
+var DB_NAME string
+var DB_USER string
+var DB_PASS string
 
 var Db *mongo.Client
 var OperationCollection *mongo.Collection
@@ -131,7 +146,13 @@ func (s *OperationDbServiceServer) ListAll(ctx context.Context, req *proto.ListA
 }
 
 func NewServer() error {
-	listener, err := net.Listen("tcp", ":50051")
+
+	err := readEnv()
+	if err != nil {
+		log.Fatalf("Error in read env: %v", err)
+	}
+
+	listener, err := net.Listen("tcp", ":"+QUERY_PORT)
 	if err != nil {
 		return err
 	}
@@ -141,7 +162,7 @@ func NewServer() error {
 
 	MongoContext = context.Background()
 	Db, err = mongo.Connect(MongoContext,
-		options.Client().ApplyURI("mongodb://localhost:27017/"))
+		options.Client().ApplyURI("mongodb://"+DB_HOST+":"+DB_PORT+"/"))
 	if err != nil {
 		return err
 	}
@@ -152,7 +173,7 @@ func NewServer() error {
 	}
 	OperationCollection = Db.Database("calculator-go").Collection("operations")
 
-	fmt.Println("Server successfully started on port:50051")
+	fmt.Println("Server successfully started on port:" + QUERY_PORT)
 
 	if err := grpcServer.Serve(listener); err != nil {
 		return err
@@ -160,4 +181,24 @@ func NewServer() error {
 
 	return nil
 
+}
+
+func readEnv() error {
+	err := godotenv.Load("../.env")
+	if err != nil {
+		return err
+	}
+	TEST_PORT = os.Getenv("TEST_PORT")
+	SERVER_PORT = os.Getenv("SERVER_PORT")
+	PROJECT_ID = os.Getenv("PROJECT_ID")
+	TOPIC_ID = os.Getenv("TOPIC_ID")
+	SUB_ID = os.Getenv("SUB_ID")
+	DB_HOST = os.Getenv("DB_HOST")
+	DB_PORT = os.Getenv("DB_PORT")
+	DB_NAME = os.Getenv("DB_NAME")
+	DB_USER = os.Getenv("DB_USER")
+	DB_PASS = os.Getenv("DB_PASS")
+	QUERY_PORT = os.Getenv("QUERY_PORT")
+
+	return nil
 }

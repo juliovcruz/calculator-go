@@ -70,14 +70,13 @@ func main() {
 	MongoContext = context.Background()
 	//options.Client().ApplyURI("mongodb://"+DB_USER+":"+DB_PASS+"@"+DB_HOST+":"+DB_PORT))
 	Db, err = mongo.Connect(MongoContext,
-		options.Client().ApplyURI("mongodb://localhost:27017/"))
+		options.Client().ApplyURI("mongodb://"+DB_HOST+":"+DB_PORT+"/"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	err = Db.Ping(MongoContext, nil)
 	if err != nil {
-		fmt.Println("debug", err)
 		log.Fatal(err)
 	}
 	OperationDb = Db.Database("calculator-go").Collection("operations")
