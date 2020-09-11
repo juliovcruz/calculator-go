@@ -45,7 +45,7 @@ func (s *OperationServiceServer) Division(ctx context.Context, req *proto.Divisi
 		result = 0
 	}
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "/"}
+	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "DIVISION"}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
@@ -67,7 +67,7 @@ func (s *OperationServiceServer) Multiplication(ctx context.Context, req *proto.
 
 	result := num1 * num2
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "*"}
+	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "MULTIPLICATION"}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
@@ -89,7 +89,7 @@ func (s *OperationServiceServer) Sum(ctx context.Context, req *proto.SumRequest)
 
 	result := num1 + num2
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "+"}
+	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "SUM"}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
@@ -111,7 +111,7 @@ func (s *OperationServiceServer) Subtraction(ctx context.Context, req *proto.Sub
 
 	result := num1 - num2
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "-"}
+	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "SUBTRACTION"}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
