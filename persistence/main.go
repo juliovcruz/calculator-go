@@ -15,16 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var TEST_PORT string
-var SERVER_PORT string
-var PROJECT_ID string
-var TOPIC_ID string
-var SUB_ID string
-var DB_HOST string
-var DB_PORT string
-var DB_NAME string
-var DB_USER string
-var DB_PASS string
+var PROJECT_ID, TOPIC_ID, SUB_ID, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS string
 
 var Db *mongo.Client
 var OperationDb *mongo.Collection
@@ -129,8 +120,6 @@ func readEnv() error {
 	if err != nil {
 		return err
 	}
-	TEST_PORT = os.Getenv("TEST_PORT")
-	SERVER_PORT = os.Getenv("SERVER_PORT")
 	PROJECT_ID = os.Getenv("PROJECT_ID")
 	TOPIC_ID = os.Getenv("TOPIC_ID")
 	SUB_ID = os.Getenv("SUB_ID")

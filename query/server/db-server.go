@@ -16,17 +16,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-var TEST_PORT string
-var SERVER_PORT string
-var QUERY_PORT string
-var PROJECT_ID string
-var TOPIC_ID string
-var SUB_ID string
-var DB_HOST string
-var DB_PORT string
-var DB_NAME string
-var DB_USER string
-var DB_PASS string
+var QUERY_PORT, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS string
 
 var Db *mongo.Client
 var OperationCollection *mongo.Collection
@@ -95,6 +85,7 @@ func (s *OperationDbServiceServer) FindByOp(ctx context.Context, req *proto.Find
 		if err != nil {
 			return nil, err
 		}
+
 		elemResult := proto.OperationDb{
 			Id:          elem.Id.Hex(),
 			Number1:     elem.Number1,
@@ -127,7 +118,6 @@ func (s *OperationDbServiceServer) ListAll(ctx context.Context, req *proto.ListA
 
 	for cursor.Next(context.TODO()) {
 
-		// create a value into which the single document can be decoded
 		var elem proto.OperationDb
 		err := cursor.Decode(&elem)
 		if err != nil {
@@ -188,11 +178,7 @@ func readEnv() error {
 	if err != nil {
 		return err
 	}
-	TEST_PORT = os.Getenv("TEST_PORT")
-	SERVER_PORT = os.Getenv("SERVER_PORT")
-	PROJECT_ID = os.Getenv("PROJECT_ID")
-	TOPIC_ID = os.Getenv("TOPIC_ID")
-	SUB_ID = os.Getenv("SUB_ID")
+
 	DB_HOST = os.Getenv("DB_HOST")
 	DB_PORT = os.Getenv("DB_PORT")
 	DB_NAME = os.Getenv("DB_NAME")

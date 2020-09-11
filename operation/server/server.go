@@ -13,11 +13,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-var TEST_PORT string
-var SERVER_PORT string
-var PROJECT_ID string
-var TOPIC_ID string
-var SUB_ID string
+var SERVER_PORT, PROJECT_ID, TOPIC_ID, SUB_ID string
 
 type ServerOptions struct {
 	Pubsub bool
@@ -178,7 +174,7 @@ func readEnv() error {
 	if err != nil {
 		return err
 	}
-	TEST_PORT = os.Getenv("TEST_PORT")
+
 	SERVER_PORT = os.Getenv("SERVER_PORT")
 	PROJECT_ID = os.Getenv("PROJECT_ID")
 	TOPIC_ID = os.Getenv("TOPIC_ID")
