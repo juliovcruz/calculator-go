@@ -13,35 +13,39 @@ type OperationModel struct {
 	number2 float64
 }
 
+type InterfaceTest struct {
+	op     OperationModel
+	result float64
+}
+
 func TestSum(t *testing.T) {
 	s := OperationServiceServer{}
 
-	mapTest := map[float64]OperationModel{
-		10: OperationModel{
-			number1: 5,
-			number2: 5,
-		},
-		20: OperationModel{
-			number1: 1,
-			number2: 19,
+	sliceTest := []InterfaceTest{
+		InterfaceTest{
+			op: OperationModel{
+				number1: 10,
+				number2: 2,
+			},
+			result: 12,
 		},
 	}
 
 	t.Run("Sum",
 		func(t *testing.T) {
-			for key, value := range mapTest {
+			for _, value := range sliceTest {
 				res, err := s.Sum(context.Background(),
 					&proto.SumRequest{
 						Operation: &proto.Operation{
-							Number1: value.number1,
-							Number2: value.number2,
+							Number1: value.op.number1,
+							Number2: value.op.number2,
 						},
 					},
 				)
 				if err != nil {
 					t.Fatalf("Error in execution method %v:", err)
 				}
-				assert.Equal(t, key, res.Result)
+				assert.Equal(t, value.result, res.Result)
 			}
 		},
 	)
@@ -51,36 +55,31 @@ func TestSum(t *testing.T) {
 func TestDivision(t *testing.T) {
 	s := OperationServiceServer{}
 
-	mapTest := map[float64]OperationModel{
-		20: OperationModel{
-			number1: 40,
-			number2: 2,
-		},
-		0: OperationModel{
-			number1: 5,
-			number2: 0,
-		},
-		30: OperationModel{
-			number1: 60,
-			number2: 2,
+	sliceTest := []InterfaceTest{
+		InterfaceTest{
+			op: OperationModel{
+				number1: 20,
+				number2: 2,
+			},
+			result: 10,
 		},
 	}
 
 	t.Run("Division",
 		func(t *testing.T) {
-			for key, value := range mapTest {
+			for _, value := range sliceTest {
 				res, err := s.Division(context.Background(),
 					&proto.DivisionRequest{
 						Operation: &proto.Operation{
-							Number1: value.number1,
-							Number2: value.number2,
+							Number1: value.op.number1,
+							Number2: value.op.number2,
 						},
 					},
 				)
 				if err != nil {
 					t.Fatalf("Error in execution method %v:", err)
 				}
-				assert.Equal(t, key, res.Result)
+				assert.Equal(t, value.result, res.Result)
 			}
 		},
 	)
