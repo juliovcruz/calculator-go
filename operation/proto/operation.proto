@@ -4,10 +4,10 @@ option go_package = "proto";
 
 enum enumOp {
   NULL = 0;
-  DIVISION = 100;
-  MULTIPLICATION = 200;
-  SUBTRACTION = 300;
-  SUM = 400;
+  DIVISION = 1;
+  MULTIPLICATION = 2;
+  SUBTRACTION = 3;
+  SUM = 4;
 }
 
 message Operation {

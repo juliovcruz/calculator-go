@@ -42,6 +42,15 @@ type Operation struct {
 	DateCreated string             `bson:"dateCreated"`
 }
 
+type OperationDb struct {
+	Id          primitive.ObjectID `bson:"_id,omitempty"`
+	Number1     float64            `bson:"number1"`
+	Operation   int32              `bson:"operation"`
+	Number2     float64            `bson:"number2"`
+	Result      float64            `bson:"result"`
+	DateCreated string             `bson:"dateCreated"`
+}
+
 func (s *OperationServiceServer) Division(ctx context.Context, req *proto.DivisionRequest) (*proto.DivisionResponse, error) {
 	num1 := req.GetNumber1()
 	num2 := req.GetNumber2()
@@ -52,7 +61,7 @@ func (s *OperationServiceServer) Division(ctx context.Context, req *proto.Divisi
 		result = 0
 	}
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "DIVISION"}
+	opData := OperationDb{Number1: num1, Number2: num2, Result: result, Operation: proto.EnumOp_value[proto.EnumOp_DIVISION.String()]}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
@@ -73,7 +82,7 @@ func (s *OperationServiceServer) Multiplication(ctx context.Context, req *proto.
 
 	result := num1 * num2
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "MULTIPLICATION"}
+	opData := OperationDb{Number1: num1, Number2: num2, Result: result, Operation: proto.EnumOp_value[proto.EnumOp_MULTIPLICATION.String()]}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
@@ -94,7 +103,7 @@ func (s *OperationServiceServer) Sum(ctx context.Context, req *proto.SumRequest)
 
 	result := num1 + num2
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "SUM"}
+	opData := OperationDb{Number1: num1, Number2: num2, Result: result, Operation: proto.EnumOp_value[proto.EnumOp_SUM.String()]}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
@@ -115,7 +124,7 @@ func (s *OperationServiceServer) Subtraction(ctx context.Context, req *proto.Sub
 
 	result := num1 - num2
 
-	opData := Operation{Number1: num1, Number2: num2, Result: result, Operation: "SUBTRACTION"}
+	opData := OperationDb{Number1: num1, Number2: num2, Result: result, Operation: proto.EnumOp_value[proto.EnumOp_SUBTRACTION.String()]}
 
 	if s.topic != nil {
 		byteJson, err := json.Marshal(opData)
@@ -137,7 +146,7 @@ func (s *OperationServiceServer) FindById(ctx context.Context, req *proto.FindBy
 	}
 
 	result := OperationCollection.FindOne(ctx, bson.M{"_id": id})
-	data := Operation{}
+	data := OperationDb{}
 	if err := result.Decode(&data); err != nil {
 		return nil, err
 	}
@@ -146,7 +155,7 @@ func (s *OperationServiceServer) FindById(ctx context.Context, req *proto.FindBy
 		Operation: &proto.Operation{
 			//Id:          id.Hex(),
 			Number1:     data.Number1,
-			Operation:   data.Operation,
+			Operation:   proto.EnumOp_name[data.Operation],
 			Number2:     data.Number2,
 			Result:      data.Result,
 			DateCreated: data.DateCreated,
@@ -154,12 +163,11 @@ func (s *OperationServiceServer) FindById(ctx context.Context, req *proto.FindBy
 	}
 
 	return response, nil
-
 }
 
 func (s *OperationServiceServer) FindByOp(ctx context.Context, req *proto.FindByOpRequest) (*proto.FindByOpResponse, error) {
 
-	cursor, err := OperationCollection.Find(ctx, bson.M{"operation": req.GetOp().String()})
+	cursor, err := OperationCollection.Find(ctx, bson.M{"operation": proto.EnumOp_value[req.GetOp().String()]})
 	if err != nil {
 		return nil, err
 	}
@@ -169,7 +177,7 @@ func (s *OperationServiceServer) FindByOp(ctx context.Context, req *proto.FindBy
 
 	for cursor.Next(context.TODO()) {
 
-		var elem Operation
+		var elem OperationDb
 		err := cursor.Decode(&elem)
 		if err != nil {
 			return nil, err
@@ -178,7 +186,7 @@ func (s *OperationServiceServer) FindByOp(ctx context.Context, req *proto.FindBy
 		elemResult := proto.Operation{
 			Id:          elem.Id.Hex(),
 			Number1:     elem.Number1,
-			Operation:   elem.Operation,
+			Operation:   proto.EnumOp_name[elem.Operation],
 			Number2:     elem.Number2,
 			Result:      elem.Result,
 			DateCreated: elem.DateCreated,
@@ -192,7 +200,6 @@ func (s *OperationServiceServer) FindByOp(ctx context.Context, req *proto.FindBy
 	}
 
 	return response, nil
-
 }
 
 func (s *OperationServiceServer) ListAll(ctx context.Context, req *proto.ListAllRequest) (*proto.ListAllResponse, error) {
@@ -207,7 +214,7 @@ func (s *OperationServiceServer) ListAll(ctx context.Context, req *proto.ListAll
 
 	for cursor.Next(context.TODO()) {
 
-		var elem Operation
+		var elem OperationDb
 		err := cursor.Decode(&elem)
 		if err != nil {
 			return nil, err
@@ -216,7 +223,7 @@ func (s *OperationServiceServer) ListAll(ctx context.Context, req *proto.ListAll
 		elemResult := proto.Operation{
 			Id:          elem.Id.Hex(),
 			Number1:     elem.Number1,
-			Operation:   elem.Operation,
+			Operation:   proto.EnumOp_name[elem.Operation],
 			Number2:     elem.Number2,
 			Result:      elem.Result,
 			DateCreated: elem.DateCreated,
@@ -230,7 +237,6 @@ func (s *OperationServiceServer) ListAll(ctx context.Context, req *proto.ListAll
 	}
 
 	return response, nil
-
 }
 
 func NewServer(ctx context.Context, serverOptions ServerOptions) error {
